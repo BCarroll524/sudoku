@@ -88,13 +88,24 @@ export class AppComponent  {
 
   getRow(position: number): void {
     this.currentRow = [];
-    const mod = position % 9;
-    let counter = 0;
-    while(counter < 9) {
-      this.currentRow.push(position - mod + counter);
-      counter++;
+    let ninth = Math.floor(position / 9);
+    let column = ninth % 3;
+    let ninthIndex = position % 3;
+    const indexs = [0,1,2];
+    for(let i of indexs) {
+      let currPosition = position + ((i - column) * 9);
+      this.getRowInNinth(currPosition, ninthIndex);
     }
     console.log(this.currentRow);
+  }
+
+  getRowInNinth(position: number, index: number): void {
+    const rowStart = position - index;
+    const indexs = [0,1,2];
+    for(let i of indexs) {
+      this.currentRow.push(rowStart + i);
+    }
+
   }
 
   getCol(position: number): void {
@@ -104,7 +115,6 @@ export class AppComponent  {
       this.currentCol.push(mod);
       mod = mod + 9;
     }
-    console.log(this.currentCol);
   }
 
 }
