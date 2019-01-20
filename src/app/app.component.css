@@ -84,3 +84,7 @@
 .empty {
   visibility: hidden;
 }
+
+.active-piece {
+  background-color: #E0E0E0;
+}

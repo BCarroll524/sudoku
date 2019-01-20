@@ -15,6 +15,7 @@ export class AppComponent  {
   starters = [];
   currentRow = [];
   currentCol = [];
+  currentNinth = [];
   storedNumber: string = undefined;
   changeValueActive: boolean = false;
   
@@ -49,6 +50,7 @@ export class AppComponent  {
     }
     this.getRow(parseInt(num));
     this.getCol(parseInt(num));
+    this.getNinth(parseInt(num));
   }
  
   getBoard(): void {
@@ -115,6 +117,27 @@ export class AppComponent  {
       this.currentCol.push(mod);
       mod = mod + 9;
     }
+  }
+
+  getNinth(position: number): void {
+    this.currentNinth = [];
+    const index = position % 9;
+    const start = position - index;
+    const indexs = [0,1,2,3,4,5,6,7,8];
+    for(let i of indexs) {
+      this.currentNinth.push(start + i);
+    }
+    console.log(this.currentNinth);
+  }
+
+  isActivePiece(num: string): boolean {
+    const pos = parseInt(num);
+    if(this.currentNinth.indexOf(pos) !== -1) {
+      return true;
+    } else if (this.currentRow.indexOf(pos) !== -1) {
+      return true;
+    }
+    return false;
   }
 
 }
