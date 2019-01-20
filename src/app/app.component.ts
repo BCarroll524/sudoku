@@ -98,7 +98,7 @@ export class AppComponent  {
       let currPosition = position + ((i - column) * 9);
       this.getRowInNinth(currPosition, ninthIndex);
     }
-    console.log(this.currentRow);
+    //console.log(this.currentRow);
   }
 
   getRowInNinth(position: number, index: number): void {
@@ -112,11 +112,54 @@ export class AppComponent  {
 
   getCol(position: number): void {
     this.currentCol = [];
-    let mod = position % 9;
-    while(mod < 81) {
-      this.currentCol.push(mod);
-      mod = mod + 9;
-    }
+    const num = Math.floor(position/9);
+    const newPos = position - num * 9;
+
+    let colNum = 0;
+    if (num == 0){
+      colNum = position%3;
+
+    }
+    else if(num == 1){
+      colNum = position%3+9;
+    }
+    else if (num == 2){
+      colNum = position%3+18;
+    }
+    else if (num == 3){
+      let newPos = position - 9 * num;
+      colNum = newPos%3;
+    }
+    else if (num == 4){
+      let newPos = position - 9 * num;
+      colNum = newPos%3 + 9;
+    }
+    else if (num == 5){
+      let newPos = position - 9 * num;
+      colNum = newPos%3 + 18;
+    }
+    else if (num == 6){
+      let newPos = position - 9 * num;
+      colNum = newPos%3;
+    }
+    else if (num == 7){
+      let newPos = position - 9 * num;
+      colNum = newPos%3 + 9;
+    }
+    else if (num ==8){
+      let newPos = position - 9 * num;
+      colNum = newPos%3 + 18;
+    }
+    this.currentCol.push(colNum);
+    this.currentCol.push(colNum + 3);
+    this.currentCol.push(colNum + 6);
+    this.currentCol.push(colNum + 27);
+    this.currentCol.push(colNum + 30);
+    this.currentCol.push(colNum + 33);
+    this.currentCol.push(colNum + 54);
+    this.currentCol.push(colNum + 57);
+    this.currentCol.push(colNum + 60);
+    console.log(this.currentCol);
   }
 
   getNinth(position: number): void {
@@ -127,7 +170,7 @@ export class AppComponent  {
     for(let i of indexs) {
       this.currentNinth.push(start + i);
     }
-    console.log(this.currentNinth);
+    //console.log(this.currentNinth);
   }
 
   isActivePiece(num: string): boolean {
@@ -135,6 +178,8 @@ export class AppComponent  {
     if(this.currentNinth.indexOf(pos) !== -1) {
       return true;
     } else if (this.currentRow.indexOf(pos) !== -1) {
+      return true;
+    } else if (this.currentCol.indexOf(pos) !== -1) {
       return true;
     }
     return false;
