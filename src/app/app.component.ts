@@ -16,7 +16,7 @@ export class AppComponent  {
   currentRow = [];
   currentCol = [];
   currentNinth = [];
-  storedNumber: string = undefined;
+  storedNumber: number = undefined;
   activePosition: number = undefined;
   
 
@@ -32,23 +32,23 @@ export class AppComponent  {
 
   }
 
-  storeNumber(num: string): void {
+  storeNumber(num: number): void {
     this.storedNumber = num;
-    if(this.validateRow(this.activePosition, parseInt(num)) 
-        && this.validateNinth(this.activePosition, parseInt(num))
-        && this.validateCol(parseInt(num))) {
+    if(this.validateRow(this.activePosition, num) 
+        && this.validateNinth(this.activePosition, num)
+        && this.validateCol(num)) {
           this.board[this.activePosition] = num;
         }
   }
 
-  changeValue(num: string): void {
+  changeValue(num: number): void {
     if(!this.checkIfStarter(num)) {
       this.storedNumber = undefined;
-      this.activePosition = parseInt(num);
+      this.activePosition = num;
     }
-    this.getRow(parseInt(num));
-    this.getCol(parseInt(num));
-    this.getNinth(parseInt(num));
+    this.getRow(num);
+    this.getCol(num);
+    this.getNinth(num);
   }
  
   getBoard(): void {
@@ -70,16 +70,16 @@ export class AppComponent  {
   }
 
 
-  checkIfStarter(num: string): boolean {
-    const position = parseInt(num);
+  checkIfStarter(num: number): boolean {
+    const position = num;
     if (this.starters.indexOf(position) === -1) {
       return false;
     }
     return true;
   }
 
-  checkIfEmpty(num: string): boolean {
-    const position = parseInt(num);
+  checkIfEmpty(num: number): boolean {
+    const position = num;
     if(this.board[position] === '0') {
       return true;
     }
@@ -124,8 +124,8 @@ export class AppComponent  {
     }
   }
 
-  isActivePiece(num: string): boolean {
-    const pos = parseInt(num);
+  isActivePiece(num: number): boolean {
+    const pos = num;
     if(this.currentNinth.indexOf(pos) !== -1) {
       return true;
     } else if (this.currentRow.indexOf(pos) !== -1) {
