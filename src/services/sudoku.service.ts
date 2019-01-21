@@ -10,7 +10,8 @@ export class SudokuService {
   endpoints = [
     'https://sugoku.herokuapp.com/board?difficulty=easy',
     'https://sugoku.herokuapp.com/board?difficulty=medium',
-    'https://sugoku.herokuapp.com/board?difficulty=hard'
+    'https://sugoku.herokuapp.com/board?difficulty=hard',
+    'https://sugoku.herokuapp.com/solve'
   ];
 
   constructor(
@@ -31,6 +32,11 @@ export class SudokuService {
   // GET hard board
   getHardBoard(): Observable<any> {
     return this.http.get(this.endpoints[2]);
+  }
+
+  // POST solve board
+  solveBoard(board: Array<number>) {
+    return this.http.post(this.endpoints[3], board);
   }
 
 }

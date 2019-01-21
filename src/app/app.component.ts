@@ -17,7 +17,7 @@ export class AppComponent  {
   currentCol = [];
   currentNinth = [];
   storedNumber: string = undefined;
-  changeValueActive: boolean = false;
+  activePosition: number = undefined;
   
 
 
@@ -33,20 +33,18 @@ export class AppComponent  {
   }
 
   storeNumber(num: string): void {
-    if(num === this.storedNumber) {
-      this.changeValueActive = false;
-      this.storedNumber = undefined;
-    } else {
-      this.changeValueActive = true;
-      this.storedNumber = num;
-    }
+    this.storedNumber = num;
+    if(this.validateRow(this.activePosition, parseInt(num)) 
+        && this.validateNinth(this.activePosition, parseInt(num))
+        && this.validateCol(parseInt(num))) {
+          this.board[this.activePosition] = num;
+        }
   }
 
   changeValue(num: string): void {
-    if(this.changeValueActive && !this.checkIfStarter(num)) {
-      this.board[num] = this.storedNumber;
-      this.changeValueActive = false;
+    if(!this.checkIfStarter(num)) {
       this.storedNumber = undefined;
+      this.activePosition = parseInt(num);
     }
     this.getRow(parseInt(num));
     this.getCol(parseInt(num));
@@ -68,9 +66,9 @@ export class AppComponent  {
         }
       }
       console.log(this.board);
-      console.log(this.starters);
     });
   }
+
 
   checkIfStarter(num: string): boolean {
     const position = parseInt(num);
@@ -88,8 +86,8 @@ export class AppComponent  {
     return false;
   }
 
-  getRow(position: number): void {
-    this.currentRow = [];
+  getNinth(position: number): void {
+    this.currentNinth = [];
     let ninth = Math.floor(position / 9);
     let column = ninth % 3;
     let ninthIndex = position % 3;
@@ -98,80 +96,33 @@ export class AppComponent  {
       let currPosition = position + ((i - column) * 9);
       this.getRowInNinth(currPosition, ninthIndex);
     }
-    //console.log(this.currentRow);
   }
 
   getRowInNinth(position: number, index: number): void {
     const rowStart = position - index;
     const indexs = [0,1,2];
     for(let i of indexs) {
-      this.currentRow.push(rowStart + i);
+      this.currentNinth.push(rowStart + i);
     }
-
   }
 
-  getCol(position: number): void {
-    this.currentCol = [];
-    const num = Math.floor(position/9);
-    const newPos = position - num * 9;
 
-    let colNum = 0;
-    if (num == 0){
-      colNum = position%3;
+  getRow(position: number): void {
+    this.currentRow = [];
+    const rowStart = Math.floor(position/9)*9;
+    for(let i =0; i < 9; i++){
+      this.currentRow.push(rowStart + i);
+    }
+  }
+  
 
+  getCol(position: number): void {
+    this.currentCol = [];
+    const colStart = position%9;
+    for(let i = 0; i <= 72; i += 9){
+      this.currentCol.push(colStart + i);
     }
-    else if(num == 1){
-      colNum = position%3+9;
-    }
-    else if (num == 2){
-      colNum = position%3+18;
-    }
-    else if (num == 3){
-      let newPos = position - 9 * num;
-      colNum = newPos%3;
-    }
-    else if (num == 4){
-      let newPos = position - 9 * num;
-      colNum = newPos%3 + 9;
-    }
-    else if (num == 5){
-      let newPos = position - 9 * num;
-      colNum = newPos%3 + 18;
-    }
-    else if (num == 6){
-      let newPos = position - 9 * num;
-      colNum = newPos%3;
-    }
-    else if (num == 7){
-      let newPos = position - 9 * num;
-      colNum = newPos%3 + 9;
-    }
-    else if (num ==8){
-      let newPos = position - 9 * num;
-      colNum = newPos%3 + 18;
-    }
-    this.currentCol.push(colNum);
-    this.currentCol.push(colNum + 3);
-    this.currentCol.push(colNum + 6);
-    this.currentCol.push(colNum + 27);
-    this.currentCol.push(colNum + 30);
-    this.currentCol.push(colNum + 33);
-    this.currentCol.push(colNum + 54);
-    this.currentCol.push(colNum + 57);
-    this.currentCol.push(colNum + 60);
-    console.log(this.currentCol);
-  }
-
-  getNinth(position: number): void {
-    this.currentNinth = [];
-    const index = position % 9;
-    const start = position - index;
-    const indexs = [0,1,2,3,4,5,6,7,8];
-    for(let i of indexs) {
-      this.currentNinth.push(start + i);
-    }
-    //console.log(this.currentNinth);
-  }
+  }
 
   isActivePiece(num: string): boolean {
     const pos = parseInt(num);
@@ -184,6 +135,36 @@ export class AppComponent  {
     }
     return false;
   }
+
+  validateRow(position: number, value: number): boolean {
+    // check if current row has passed in value
+    for(let i of this.currentRow) {
+      if(parseInt(this.board[i]) === value) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  
+  validateNinth(position: number, value: number): boolean {
+    // check if current ninth has passed in value
+    for(let i of this.currentNinth) {
+      if(parseInt(this.board[i]) === value) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  validateCol(inputNum:number){
+    for(let i of this.currentCol){
+      if(parseInt(this.board[i]) === inputNum){
+        return false;
+      }
+    }
+    return true;
+  }
 
 }
 
